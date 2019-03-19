@@ -13,26 +13,26 @@ This section creates a working hazard that can hurt the player. In this section 
 
 3. Open the **Hazard** script and add the following fields to the top of the class. These variables will hold references to assets when the saw blade triggers the hazard action.
 
-```c#
-public GameObject playerDethPrefab;
-public AudioClip deathClip;
-public Sprite hitSprite;
-private SpriteRenderer sr;
-```
+	```c#
+	public GameObject playerDethPrefab;
+	public AudioClip deathClip;
+	public Sprite hitSprite;
+	private SpriteRenderer sr;
+	```
 
 4. Add the **Awake()** method above the **Start()** method to reference the sprite render when the script starts.
 
-```c#
-private void Awake()
-{
-    sr = GetComponent<SpriteRenderer>();
-}
-```
+	```c#
+	private void Awake()
+	{
+		sr = GetComponent<SpriteRenderer>();
+	}
+	```
 
 5. Now to implement the logic behind the destruction of Soy Boy. Add the new **OnCollisionEnter2D()** method. After making sure the collision is with Soy Boy (player), the tasks performed are to **play the audio clip** if assigned to script, **create an instance** of the **playerDeathPrefab** , and **destroy SoyBoy**.
 
-```c#
-private void OnCollisionEnter2D(Collision2D coll){
+	```c#
+	private void OnCollisionEnter2D(Collision2D coll){
 		if (coll.transform.tag == "Player") {
 			var audioSource = GetComponent<AudioSource> ();
 			if (audioSource != null) {
@@ -46,7 +46,7 @@ private void OnCollisionEnter2D(Collision2D coll){
 			//coll.transform.position = obj.startPosition;
 		}
 	}
-```
+	```
 
 6. Save the script and return to Unity.
 7. Drag and drop the **buzzsaw-hit** sprite from the Sprites folder, to the **Hit Sprite** field of the script.
@@ -160,32 +160,69 @@ You will now create a game manager that performs win and loss states. This scrip
 
 1. Create a new empty GameObject called **GameManager** then add new **script** component, also called **GameManager**.
 
-1. Add the instance variable and Awake() method to the GameManager script.
+2. Add the instance variable and Awake() method to the GameManager script.
 
-```c#
-```
+	```c#
+	public static GameManager instance
+	private void Awake()
+	{
+		if(instance == null)
+		{
+			instance = this;
+		}
+		else if(instance != this)
+		{
+			Destroy(gameObject);
+		}
+		DontDestroyOnLoad(gameObject);
+	}
+	```
 
-1. Next, you need a centralized way of telling a level to reload from the **GameManager**. Add the following using statement to the top of the script, and then two new methods to the class:
+3. Next, you need a centralized way of telling a level to reload from the **GameManager**. Add the following using statement to the top of the script, and then two new methods to the class:
 
- ```c#
- ```c#
+	```c#
+	using UnityEngine.SceneManagement;
+	public void RestartLevel(float delay)
+	{
+		StartCoroutine(RestartLevelDelay(delay));	
+	}
+	private IEnumerator RestartLevelDaley(float delay)
+	{
+		yield return new WaitForSeconds(delay);
+		SceneManager.LoadScene("Game");
+	}
+	```c#
 
-1. **Save** your changes and open the **Hazard** script. On the next line after the Destroy call, add the line of code. This will call the GameManager instance&#39;s RestartLevel() method after a delay of 1.25 seconds.
+4. **Save** your changes and open the **Hazard** script. On the next line after the Destroy call, add the line of code. This will call the GameManager instance&#39;s RestartLevel() method after a delay of 1.25 seconds.
 
-```c#
-```c#
+	```c#
+	GameManager.instance.RestartLevel(1.25f);
+	```
 
 ## Creating the Level Goal
 
 1. Create a new **C# script** called **Goal** and open it for editing. Add the following code to the top of the class. This code checks for collisions with the Goal GameObject. If this happens the goalClip plays and after 0.5 seconds, the level reloads.
 
-```c#
-```c#
+	```c#
+	public AudioClip goalClip;
+	void OnCollisionEnter2D(Collision2D coll)
+	{
+		if(coll.gameObject.tag == "Player")
+		{
+			var audioSource = GetComponent<AudioSource>();
+			if(audioSource != null && goalClip != null)
+			{
+				audioSource.PlayOneShot(goalClip);
+			}
+			GameManager.instance.RestartLevel(0.5f);
+		}
+	}
+	```
 
-1. **Save** your changes and return to Unity. Locate the **Goal** prefab in the **Assets/Resources/Prefabs** folder and add the **Goal** script to this prefab.
-2. Drag and drop the **ssb\_goal** to the **AudioClip** field in the **AudioSource** component.
-3. The GameManager is now complete. It will restart the level when the player dies, and also when the player wins.
-4. Drop a copy of the **Goal** prefab into your **Game** scene and position it on a platform. **Run** the game and test to make sure the level restarts when the Goal is touched by SoyBoy.
+2. **Save** your changes and return to Unity. Locate the **Goal** prefab in the **Assets/Resources/Prefabs** folder and add the **Goal** script to this prefab.
+3. Drag and drop the **ssb\_goal** to the **AudioClip** field in the **AudioSource** component.
+4. The GameManager is now complete. It will restart the level when the player dies, and also when the player wins.
+5. Drop a copy of the **Goal** prefab into your **Game** scene and position it on a platform. **Run** the game and test to make sure the level restarts when the Goal is touched by SoyBoy.
 
 ## Adding a Level Timer
 
@@ -194,14 +231,23 @@ Next, you&#39;ll create a timer that will time your level runs.
 1. Create a new script called **Timer** and open it for editing.
 2. The time elapsed will be displayed during the game, so you will need to import the UserInterface.
 
-```c#
-```c#
+	```c#
+	using UnityEngine.UI;
+	```
 
-1. Delete the default Start() method then add the code in a new Awake() method and the Update() method.
+3. Delete the default Start() method then add the code in a new Awake() method and the Update() method.
 
-```c#
-```c#
+	```c#
+	private Text timerText;
+	private void Awake()
+	{
+		timerText = GetComponent<Text>();
+	}
+	void Update()
+	{
+		timerText.txt = System.Math.Round((decimal)Time.timeSinceLevelLoad, 2).ToString();
+	}
+	```
 
-1. Attach the **Timer** script to the **Timer** GameObject located in the **Canvas** object.
-2. Run the game, and you will see the timer counting up as you play the level.
-
+4. Attach the **Timer** script to the **Timer** GameObject located in the **Canvas** object.
+5. Run the game, and you will see the timer counting up as you play the level.
