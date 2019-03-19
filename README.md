@@ -1,4 +1,3 @@
-# soyboy3tutorial
 # Super Soy Boy2D, Part 3
 
 Continue editing the Game scene in your previous Soy Boy project.
