@@ -192,7 +192,7 @@ You will now create a game manager that performs win and loss states. This scrip
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene("Game");
 	}
-	```c#
+	```
 
 4. **Save** your changes and open the **Hazard** script. On the next line after the Destroy call, add the line of code. This will call the GameManager instance&#39;s RestartLevel() method after a delay of 1.25 seconds.
 
