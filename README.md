@@ -24,7 +24,7 @@ This section creates a working hazard that can hurt the player. In this section 
 	```c#
 	private void Awake()
 	{
-		sr = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
 	}
 	```
 
@@ -32,18 +32,20 @@ This section creates a working hazard that can hurt the player. In this section 
 
 	```c#
 	private void OnCollisionEnter2D(Collision2D coll){
-		if (coll.transform.tag == "Player") {
-			var audioSource = GetComponent<AudioSource> ();
-			if (audioSource != null) {
-				audioSource.PlayOneShot (deathClip);
-			}
-			Instantiate(playerDeathPrefab, coll.contacts[0].point, Quaternion.identity);
-			sr.sprite = hitSprite;
-			Destroy(coll.gameObject)
-			//GameManager.instance.RestartLevel (1.25f);
-			//SoyBoyController obj = new SoyBoyController();
-			//coll.transform.position = obj.startPosition;
-		}
+        if (coll.transform.tag == "Player")
+        {
+            var audioSource = GetComponent<AudioSource> ();
+            if (audioSource != null)
+            {
+                audioSource.PlayOneShot (deathClip);
+            }
+            Instantiate(playerDeathPrefab, coll.contacts[0].point, Quaternion.identity);
+            sr.sprite = hitSprite;
+            Destroy(coll.gameObject)
+            //GameManager.instance.RestartLevel (1.25f);
+            //SoyBoyController obj = new SoyBoyController();
+            //coll.transform.position = obj.startPosition;
+        }
 	}
 	```
 
@@ -81,7 +83,7 @@ This section creates a working hazard that can hurt the player. In this section 
 public float rotationsPerMinute = 640f;
 void Update()
 {
-	transform.Rotate(0, 0, rotationsPerMinute * Time.deltaTime, Space.Self);
+    transform.Rotate(0, 0, rotationsPerMinute * Time.deltaTime, Space.Self);
 }
 ```
 
@@ -109,42 +111,42 @@ void Update()
 	```c#
 	void PlayAudioClip(AudioClip clip)
 	{
-		if(audioSource != null && clip != null)
-		{
-			if(!audioSource.isPlaying)
-				audioSource.PlayOneShot(clip);
-		}
+        if(audioSource != null && clip != null)
+        {
+            if(!audioSource.isPlaying)
+                audioSource.PlayOneShot(clip);
+        }
 	}
 	```
 	* Add the **PlayAudioClip** code for jumping and running in the already conditional block so it looks like this:
 	```c#
 	if(PlayerIsOnGround() && isJumping == false)
 	{
-		if(input.y > 0f)
-		{
-			isJumping = true;
-			PlayAudioClip(jumpClip);
-		}
-		animator.SetBool("IsOnWall", false);
-		if(input.x < 0f || input.x > 0f)
-			PlayAudioClip(runClip);
+        if(input.y > 0f)
+        {
+            isJumping = true;
+            PlayAudioClip(jumpClip);
+        }
+        animator.SetBool("IsOnWall", false);
+        if(input.x < 0f || input.x > 0f)
+            PlayAudioClip(runClip);
 	}
 	```
 	* Add two more **PlayAudioClip** calls to the end of each of the conditional blocks.
 	```c#
 	if(IsWallToLeftOrRight() && !PlayerIsOnGround() && input.y == 1)
 	{
-		rb.velocity = new Vector2(-GetWallDirection() * speed * 0.75f, rb.velocity.y);
-		animator.SetBool("IsOnWall", false);
-		animator.SetBool("IsJumping", true);
-		PlayAudioClip(jumpClip);
+        rb.velocity = new Vector2(-GetWallDirection() * speed * 0.75f, rb.velocity.y);
+        animator.SetBool("IsOnWall", false);
+        animator.SetBool("IsJumping", true);
+        PlayAudioClip(jumpClip);
 	}
 	```
 	```c#
 	if(IsWallToLeftOrRight() && !PlayerIsOnGround())
 	{
-		animator.SetBool("IsOnWall", true);
-		PlayAudioClip(slideClip);
+        animator.SetBool("IsOnWall", true);
+        PlayAudioClip(slideClip);
 	}
 	```
 	* **Save** your changes and switch back to Unity.
@@ -165,15 +167,15 @@ You will now create a game manager that performs win and loss states. This scrip
 	public static GameManager instance
 	private void Awake()
 	{
-		if(instance == null)
-		{
-			instance = this;
+        if(instance == null)
+        {
+            instance = this;
 		}
 		else if(instance != this)
 		{
-			Destroy(gameObject);
+            Destroy(gameObject);
 		}
-		DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
 	}
 	```
 
@@ -183,12 +185,12 @@ You will now create a game manager that performs win and loss states. This scrip
 	using UnityEngine.SceneManagement;
 	public void RestartLevel(float delay)
 	{
-		StartCoroutine(RestartLevelDelay(delay));	
+        StartCoroutine(RestartLevelDelay(delay));	
 	}
 	private IEnumerator RestartLevelDaley(float delay)
 	{
-		yield return new WaitForSeconds(delay);
-		SceneManager.LoadScene("Game");
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene("Game");
 	}
 	```c#
 
@@ -206,14 +208,14 @@ You will now create a game manager that performs win and loss states. This scrip
 	public AudioClip goalClip;
 	void OnCollisionEnter2D(Collision2D coll)
 	{
-		if(coll.gameObject.tag == "Player")
-		{
-			var audioSource = GetComponent<AudioSource>();
-			if(audioSource != null && goalClip != null)
-			{
-				audioSource.PlayOneShot(goalClip);
-			}
-			GameManager.instance.RestartLevel(0.5f);
+        if(coll.gameObject.tag == "Player")
+        {
+            var audioSource = GetComponent<AudioSource>();
+            if(audioSource != null && goalClip != null)
+            {
+                audioSource.PlayOneShot(goalClip);
+            }
+            GameManager.instance.RestartLevel(0.5f);
 		}
 	}
 	```
@@ -240,11 +242,11 @@ Next, you&#39;ll create a timer that will time your level runs.
 	private Text timerText;
 	private void Awake()
 	{
-		timerText = GetComponent<Text>();
+        timerText = GetComponent<Text>();
 	}
 	void Update()
 	{
-		timerText.txt = System.Math.Round((decimal)Time.timeSinceLevelLoad, 2).ToString();
+        timerText.txt = System.Math.Round((decimal)Time.timeSinceLevelLoad, 2).ToString();
 	}
 	```
 
