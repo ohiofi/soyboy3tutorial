@@ -168,7 +168,7 @@ You will now create a game manager that performs win and loss states. This scrip
 	private void Awake()
 	{
         if(instance == null)
-        {
+		{
             instance = this;
 		}
 		else if(instance != this)
