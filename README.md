@@ -216,7 +216,7 @@ You will now create a game manager that performs win and loss states. This scrip
                 audioSource.PlayOneShot(goalClip);
             }
             GameManager.instance.RestartLevel(0.5f);
-		}
+        }
 	}
 	```
 
