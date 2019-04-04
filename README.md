@@ -43,8 +43,7 @@ This section creates a working hazard that can hurt the player. In this section 
             sr.sprite = hitSprite;
             Destroy(coll.gameObject)
             //GameManager.instance.RestartLevel (1.25f);
-            //SoyBoyController obj = new SoyBoyController();
-            //coll.transform.position = obj.startPosition;
+            //coll.transform.position = coll.gameObject.GetComponent<SoyBoyController>().startPosition;
         }
 	}
 	```
