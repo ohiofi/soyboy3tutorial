@@ -13,7 +13,7 @@ This section creates a working hazard that can hurt the player. In this section 
 3. Open the **Hazard** script and add the following fields to the top of the class. These variables will hold references to assets when the saw blade triggers the hazard action.
 
 	```c#
-	public GameObject playerDethPrefab;
+	public GameObject playerDeathPrefab;
 	public AudioClip deathClip;
 	public Sprite hitSprite;
 	private SpriteRenderer sr;
